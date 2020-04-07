@@ -9,8 +9,15 @@ describe('Test JS',function(){
         }  
     })
 
+    Cypress.Commands.add('filterItems', (etat) => {
+        cy.get('.filters')
+        .contains(etat)
+        .click()
+        
+    })
+
     // -> Function for inser items with state
-    Cypress.Commands.add('inserItem', (list, etat) => {
+    Cypress.Commands.add('inserItemWithState', (list) => {
 
         for (var iter = 0; iter < list.length; iter++) {
             cy.get('.new-todo')
@@ -21,13 +28,10 @@ describe('Test JS',function(){
                 .find(".toggle")
                 .check()  
             }
-
-            cy.get('.filters')
-            .contains(etat)
-            .click()
         }
-        
     })
+
+   
 
     beforeEach(function () {
         cy.visit('http://todomvc.com/examples/jquery/')
@@ -67,7 +71,8 @@ describe('Test JS',function(){
 
     // -> All
     it('Should get all items', function () {
-        cy.inserItem([["Angular", "Active"], ["Laravel", "Completed"]], "All")
+        cy.inserItemWithState([["Angular", "Active"], ["Laravel", "Completed"]])
+        cy.filterItems("All")
 
         cy.get('.todo-list li')
         .should('have.length', 2)
@@ -76,7 +81,8 @@ describe('Test JS',function(){
     
     // -> Active
     it('Should get active items', function () {
-        cy.inserItem([["Angular", "Active"], ["Laravel", "Completed"]], "Active")
+        cy.inserItemWithState([["Angular", "Active"], ["Laravel", "Completed"]])
+        cy.filterItems("Active")
 
         cy.get('.todo-list li')
         .should('have.length', 1)
@@ -85,7 +91,8 @@ describe('Test JS',function(){
 
 	// Completed
     it('Should get completed items', function () {
-        cy.inserItem([["Angular", "Active"], ["Laravel", "Completed"]], "Completed")
+        cy.inserItemWithState([["Angular", "Active"], ["Laravel", "Completed"]])
+        cy.filterItems("Completed")
 
         cy.get('.todo-list li')
         .should('have.length', 1)
