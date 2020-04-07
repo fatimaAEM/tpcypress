@@ -1,12 +1,8 @@
 describe('Test JS',function(){
 
-     // setup these constants to match what TodoMVC does
-    let TODO_ITEM_ONE = 'Javascript'
-    let TODO_ITEM_TWO = 'JEE'
-    let TODO_ITEM_THREE = 'PHP'
 
     // -> Function for inser items
-    Cypress.Commands.add('constItems', (items) => {
+    Cypress.Commands.add('insertItems', (items) => {
         for (var item = 0; item < items.length; item++) {
             cy.get('.new-todo')
             .type(items[item] + "{enter}")
@@ -38,8 +34,7 @@ describe('Test JS',function(){
     }) 
 	
     it('Should add item', function () {
-        cy.get('.new-todo')
-        .type(TODO_ITEM_ONE+"{enter}")
+        cy.insertItems(['Javascript'])
 
         cy.get('.todo-list li')
         .should("have.length", 1)
@@ -47,8 +42,7 @@ describe('Test JS',function(){
     })
 	
 	it('Should delete one item', function () {
-        cy.get('.new-todo')
-        .type(TODO_ITEM_ONE+"{enter}")
+        cy.insertItems(['Javascript'])
 
         cy.get('.todo-list li')
         .should("contain","Javascript")
@@ -59,7 +53,7 @@ describe('Test JS',function(){
     })   
 	
     it('Should delete all items', function () {
-        cy.constItems([TODO_ITEM_ONE,TODO_ITEM_TWO,TODO_ITEM_THREE])
+        cy.insertItems(['Javascript','JEE','PHP'])
 
         cy.get('.todo-list li').each(function () {
             cy.get(".destroy").click({
@@ -99,7 +93,7 @@ describe('Test JS',function(){
     })
 
     it('Should delete completed items', function () {
-        cy.constItems([TODO_ITEM_ONE,TODO_ITEM_TWO,TODO_ITEM_THREE])
+        cy.insertItems(['Javascript','JEE','PHP'])
 
         cy.get('.todo-list li')
         .eq(1)
